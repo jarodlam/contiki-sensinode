@@ -24,7 +24,7 @@
  * SUCH DAMAGE.
  *
  * This file is part of the Contiki operating system.
- *
+ * 
  */
 
 #include "contiki.h"
@@ -77,7 +77,9 @@ tcpip_handler(void)
     uip_ipaddr_copy(&server_conn->ripaddr, &UIP_IP_BUF->srcipaddr);
     server_conn->rport = UIP_UDP_BUF->srcport;
 
-    uip_udp_packet_send(server_conn, buf, len);
+    
+strcat(buf,"-Server replied!\n");
+uip_udp_packet_send(server_conn, buf, len+sizeof(,"-Server replied!\n"));
     /* Restore server connection to allow data from any node */
     uip_create_unspecified(&server_conn->ripaddr);
     server_conn->rport = 0;
