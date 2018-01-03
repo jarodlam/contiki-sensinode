@@ -79,7 +79,7 @@ tcpip_handler(void)
 
     
 strcat(buf,"-Server replied!\n");
-uip_udp_packet_send(server_conn, buf, len+sizeof(,"-Server replied!\n"));
+uip_udp_packet_send(server_conn, buf, len+sizeof("-Server replied!\n"));
     /* Restore server connection to allow data from any node */
     uip_create_unspecified(&server_conn->ripaddr);
     server_conn->rport = 0;

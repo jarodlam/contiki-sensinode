@@ -8,7 +8,7 @@ UIP_CONF_RPL=1
 
 PROJECT_SOURCEFILES += ping6.c
 
-CONTIKI_PROJECT = client1 client2 server
+CONTIKI_PROJECT = server
 
 all: $(CONTIKI_PROJECT) 
 
