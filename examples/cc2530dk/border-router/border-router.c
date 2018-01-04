@@ -61,6 +61,7 @@ static uint8_t prefix_set;
 PROCESS(border_router_process, "Border Router process");
 AUTOSTART_PROCESSES(&border_router_process);
 /*---------------------------------------------------------------------------*/
+/* Function for listing the current device's IP addresses */
 static void
 print_local_addresses(void) CC_NON_BANKED
 {
@@ -82,6 +83,7 @@ print_local_addresses(void) CC_NON_BANKED
   }
 }
 /*---------------------------------------------------------------------------*/
+/* Function to request an IPv6 address prefix from the host */
 static void
 request_prefix(void) CC_NON_BANKED
 {
@@ -114,6 +116,7 @@ set_prefix_64(uip_ipaddr_t *prefix_64)
   }
 }
 /*---------------------------------------------------------------------------*/
+/* The main process */
 PROCESS_THREAD(border_router_process, ev, data)
 {
   static struct etimer et;
@@ -134,6 +137,7 @@ PROCESS_THREAD(border_router_process, ev, data)
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
   }
   /* We have created a new DODAG when we reach here */
+  /* DODAG is Direction Oriented Directed Acyclic Graph */
   PUTSTRING("On Channel ");
   PUTDEC(cc2530_rf_channel_get());
   PUTCHAR('\n');
