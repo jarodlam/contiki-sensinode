@@ -24,7 +24,6 @@ summary
 *.faillog
 obj_*
 symbols.*
-Makefile.target
 doc/html
 patches-*
 tools/tunslip6
