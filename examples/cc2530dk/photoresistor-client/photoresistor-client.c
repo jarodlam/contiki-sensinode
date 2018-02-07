@@ -37,7 +37,7 @@
 static struct uip_udp_conn *server_conn;
 static char buf[MAX_PAYLOAD_LEN];
 static char received_data[MAX_PAYLOAD_LEN];
-static uint8_t reading8 = 0;
+static uint16_t reading;
 
 /*---------------------------------------------------------------------------*/
 PROCESS(udp_server_process, "UDP server process");
@@ -56,18 +56,15 @@ tcpip_handler(void)
 	memcpy(received_data, uip_appdata, uip_datalen());
 	printf("Received data: %s\n", received_data);
 	
-	//if(strcmp(received_data, "light")) {
-		/* Connect to the client */
-	    uip_ipaddr_copy(&server_conn->ripaddr, &UIP_IP_BUF->srcipaddr);
-	    //server_conn->rport = UIP_UDP_BUF->srcport;
-	    server_conn->rport = 3000;
-		/* Send the value */
-	    uip_udp_packet_send(server_conn, reading8, 1);
-		printf("Sent message: %d\n", reading8);
-	    /* Restore server connection to allow data from any node */
-	    uip_create_unspecified(&server_conn->ripaddr);
-	    //server_conn->rport = 0;
-		//}
+	/* Connect to the client */
+    uip_ipaddr_copy(&server_conn->ripaddr, &UIP_IP_BUF->srcipaddr);
+    server_conn->rport = UIP_UDP_BUF->srcport;
+	/* Send the value */
+    uip_udp_packet_send(server_conn, &reading, sizeof(reading));
+	printf("Sent message: %d (%x)\n", reading, reading);
+    /* Restore server connection to allow data from any node */
+    uip_create_unspecified(&server_conn->ripaddr);
+    server_conn->rport = 0;
 	
 	memset(received_data, 0, MAX_PAYLOAD_LEN);
     leds_off(LEDS_RED);
@@ -77,10 +74,9 @@ tcpip_handler(void)
 /*---------------------------------------------------------------------------*/
 /* Function to read photoresistor */
 static struct etimer et;
-static uint8_t ReadLightSensor()
+static char ReadLightSensor()
 {
 	uint8_t command;
-	uint16_t reading;
 
 	/* Configure pins */
 #ifdef DEBUG
@@ -124,10 +120,8 @@ static uint8_t ReadLightSensor()
     /* Read the high and low bytes. */
 	reading = ADCL;
     reading |= (((uint8_t) ADCH) << 8);
-	/* We only need 8 bits of resolution. */
-	reading8 = reading >> 7;
 	
-	return reading8;
+	return reading;
 }
 /*---------------------------------------------------------------------------*/
 /* This function is run once when the network is created. */
