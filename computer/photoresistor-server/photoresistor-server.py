@@ -47,4 +47,9 @@ while True:
     print("Received message:", value)
 
     percent = -(value / 32764 * 100) + 100
-    ubidots_variable.save_value({'value': percent})
+    
+    try:
+        ubidots_variable.save_value({'value': percent})
+    except ValueError as err:
+        print(format(err))
+        pass
